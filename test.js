@@ -1,17 +1,28 @@
-let room = {
-    number: 23
-};
+// Interative solution
+// function sumTo(n) {
+//     let sum = 0;
+//     for(let i = n; i >= 1; i--) {
+//         sum += i;
+//     }
 
-let meetup = {
-    title: "Conference",
-    occupiedBy: [{name: "John"}, {name: "Alice"}],
-    place: room
-};
-  
-// circular references
-room.occupiedBy = meetup;
-meetup.self = meetup;
+//     return sum;
+// }
 
-console.log( JSON.stringify(meetup, function replacer(key, value) {
-    return (key && value.title) ? undefined : value;
-}, 4));
+// Recursive solution
+// function sumTo(n) {
+//     if(n > 1) {
+//         return n + sumTo(n - 1);
+//     } else {
+//         return n;
+//     }
+// }
+
+// Arithmetic Progression formula
+function sumTo(n) {
+    return (n*(1 + n))/2;
+}
+
+let start = Date.now();
+console.log(sumTo(100000));
+let end = Date.now();
+console.log(`Time taken: ${end - start}ms`);
