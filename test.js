@@ -1,28 +1,22 @@
 // Interative solution
-// function sumTo(n) {
-//     let sum = 0;
-//     for(let i = n; i >= 1; i--) {
-//         sum += i;
+// function fib(n) {
+//     let fibs = [1, 1];
+
+//     for(let i = 1; i < n; i++) {
+//         fibs.push(fibs[i] + fibs[i - 1]);
 //     }
 
-//     return sum;
+//     return fibs[n - 1];
 // }
 
 // Recursive solution
-// function sumTo(n) {
-//     if(n > 1) {
-//         return n + sumTo(n - 1);
-//     } else {
-//         return n;
-//     }
-// }
+function fib(n) {
+    if(n > 1) return fib(n-2) + fib(n-1);
 
-// Arithmetic Progression formula
-function sumTo(n) {
-    return (n*(1 + n))/2;
+    return n;
 }
 
 let start = Date.now();
-console.log(sumTo(100000));
+console.log(fib(7))
 let end = Date.now();
 console.log(`Time taken: ${end - start}ms`);
