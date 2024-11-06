@@ -1,22 +1,39 @@
-// Interative solution
-// function fib(n) {
-//     let fibs = [1, 1];
+let list = {
+    value: 1,
+    next: {
+        value: 2,
+        next: {
+            value: 3,
+            next: {
+                value: 4,
+                next: null
+            }
+        }
+    }
+};
 
-//     for(let i = 1; i < n; i++) {
-//         fibs.push(fibs[i] + fibs[i - 1]);
+// Iterative solution
+// function printList(list) {
+//     let temp = list;
+//     let values = [];
+
+//     while(temp) {
+//         values.push(temp.value);
+//         temp = temp.next;
 //     }
 
-//     return fibs[n - 1];
+//     for(let i = values.length - 1; i >= 0; i--) {
+//         console.log(values[i]);
+//     }
 // }
 
 // Recursive solution
-function fib(n) {
-    if(n > 1) return fib(n-2) + fib(n-1);
+function printList(list) {
+    if(list.next) {
+        printList(list.next);
+    }
 
-    return n;
+    console.log(list.value);
 }
 
-let start = Date.now();
-console.log(fib(7))
-let end = Date.now();
-console.log(`Time taken: ${end - start}ms`);
+printList(list);
