@@ -1,39 +1,19 @@
-let list = {
-    value: 1,
-    next: {
-        value: 2,
-        next: {
-            value: 3,
-            next: {
-                value: 4,
-                next: null
-            }
+function inBetween(a, b) {
+    return function(value) {
+        if(value >= a && value <= b) {
+            return true;
         }
-    }
-};
-
-// Iterative solution
-// function printList(list) {
-//     let temp = list;
-//     let values = [];
-
-//     while(temp) {
-//         values.push(temp.value);
-//         temp = temp.next;
-//     }
-
-//     for(let i = values.length - 1; i >= 0; i--) {
-//         console.log(values[i]);
-//     }
-// }
-
-// Recursive solution
-function printList(list) {
-    if(list.next) {
-        printList(list.next);
-    }
-
-    console.log(list.value);
+    };
 }
 
-printList(list);
+function inArray(arr) {
+    return function(value) {
+        return arr.includes(value);
+    }
+}
+
+let arr = [1, 2, 3, 4, 5, 6, 7];
+
+console.log(arr.filter(inBetween(3, 6))); // 3,4,5,6
+
+console.log( arr.filter(inArray([1, 2, 10])) ); // 1,2
