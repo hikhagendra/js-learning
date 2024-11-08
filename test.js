@@ -1,19 +1,14 @@
-function inBetween(a, b) {
-    return function(value) {
-        if(value >= a && value <= b) {
-            return true;
-        }
-    };
-}
-
-function inArray(arr) {
-    return function(value) {
-        return arr.includes(value);
+function byField(field) {
+    return function(a, b) {
+        return a[field] > b[field] ? 1 : -1;
     }
 }
 
-let arr = [1, 2, 3, 4, 5, 6, 7];
+let users = [
+    { name: "John", age: 20, surname: "Johnson" },
+    { name: "Pete", age: 18, surname: "Peterson" },
+    { name: "Ann", age: 19, surname: "Hathaway" }
+];
 
-console.log(arr.filter(inBetween(3, 6))); // 3,4,5,6
-
-console.log( arr.filter(inArray([1, 2, 10])) ); // 1,2
+users.sort(byField('age'));
+console.log(users);
