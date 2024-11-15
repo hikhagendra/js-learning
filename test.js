@@ -1,23 +1,15 @@
-function work(a, b) {
-    console.log( a + b ); // work is an arbitrary function or method
+function f(x) {
+    console.log(x);
 }
 
-function spy(func) {
-    function wrapper(...args) {
-        wrapper.calls.push(args);
-        return func.apply(this, args);
+function delay(func, delay) {
+    return function() {
+        setTimeout(() => func.apply(null, arguments), delay);
     };
-    wrapper.calls = [];
-
-    return wrapper;
 }
 
-work = spy(work);
+let f1000 = delay(f, 1000);
+let f1500 = delay(f, 1500);
 
-work(1, 2);
-work(4, 5);
-work(3, 4);
-
-for (let args of work.calls) {
-    console.log( 'call:' + args.join() ); // "call:1,2", "call:4,5"
-}
+f1000('test1000');
+f1500('test1500');
