@@ -1,14 +1,23 @@
-function byField(field) {
-    return function(a, b) {
-        return a[field] > b[field] ? 1 : -1;
-    }
+function work(a, b) {
+    console.log( a + b ); // work is an arbitrary function or method
 }
 
-let users = [
-    { name: "John", age: 20, surname: "Johnson" },
-    { name: "Pete", age: 18, surname: "Peterson" },
-    { name: "Ann", age: 19, surname: "Hathaway" }
-];
+function spy(func) {
+    function wrapper(...args) {
+        wrapper.calls.push(args);
+        return func.apply(this, args);
+    };
+    wrapper.calls = [];
 
-users.sort(byField('age'));
-console.log(users);
+    return wrapper;
+}
+
+work = spy(work);
+
+work(1, 2);
+work(4, 5);
+work(3, 4);
+
+for (let args of work.calls) {
+    console.log( 'call:' + args.join() ); // "call:1,2", "call:4,5"
+}
