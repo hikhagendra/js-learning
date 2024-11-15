@@ -2,14 +2,20 @@ function f(x) {
     console.log(x);
 }
 
-function delay(func, delay) {
-    return function() {
-        setTimeout(() => func.apply(null, arguments), delay);
+function debounce(f, ms) {
+    let lastArg;
+    setTimeout(() => f(lastArg), ms);
+
+    function wrapper(x) {
+        f.call(this, x);
+        lastArg = x;
     };
+
+    return wrapper;
 }
 
-let f1000 = delay(f, 1000);
-let f1500 = delay(f, 1500);
+f = debounce(f, 2000);
 
-f1000('test1000');
-f1500('test1500');
+f('a');
+setTimeout(() => f('b'), 200);
+setTimeout(() => f('c'), 500);
