@@ -1,21 +1,33 @@
-function f(x) {
-    console.log(x);
+function f(a) {
+    console.log(a);
 }
 
-function debounce(f, ms) {
-    let lastArg;
-    setTimeout(() => f(lastArg), ms);
+function throttle(func, ms) {
+    let lastCall = null;
+    let timerId;
 
-    function wrapper(x) {
-        f.call(this, x);
-        lastArg = x;
-    };
-
-    return wrapper;
+    return function(x) {
+        if(!lastCall) {
+            func.call(this, x);
+            lastCall = Date.now();
+        } else {
+            if((Date.now() - lastCall) >= ms) {
+                setTimeout(() => func.call(this, x), ms);
+                lastCall = Date.now();
+            } else {
+                clearTimeout(timerId);
+                timerId = setTimeout(() => func.call(this, x), ms);
+                lastCall = Date.now();
+            }
+        }
+    }
 }
 
-f = debounce(f, 2000);
+let f1000 = throttle(f, 1000);
 
-f('a');
-setTimeout(() => f('b'), 200);
-setTimeout(() => f('c'), 500);
+f1000(1);
+setTimeout( () => f1000(2), 1000);
+f1000(3);
+f1000(4);
+f1000(5);
+f1000(6);
