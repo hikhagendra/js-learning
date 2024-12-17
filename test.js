@@ -1,33 +1,40 @@
-function f(a) {
-    console.log(a);
-}
+let list = document.getElementById('list');
+let totalChild = 0;
+let text = '';
 
-function throttle(func, ms) {
-    let lastCall = null;
-    let timerId;
+function scanner(list) {
+    for(let i = 0; i < list.children.length; i++) {
+        if(list.children[i].tagName == 'LI') {
+            // Fetch the value of LI and count its children
+            text = list.children[i].childNodes[0].data;
 
-    return function(x) {
-        if(!lastCall) {
-            func.call(this, x);
-            lastCall = Date.now();
-        } else {
-            if((Date.now() - lastCall) >= ms) {
-                setTimeout(() => func.call(this, x), ms);
-                lastCall = Date.now();
+            if(list.children[i].childNodes.length != 1) {
+                childCounter(list.children[i], 0)
             } else {
-                clearTimeout(timerId);
-                timerId = setTimeout(() => func.call(this, x), ms);
-                lastCall = Date.now();
+                totalChild = 0;
+            }
+
+            // Display the values in alert
+            alert(text.trim() + ': ' + totalChild);
+
+            // If the LI has child UL then re-run the loop
+            if(list.children[i].childNodes.length != 1) {
+                totalChild = 0;
+                scanner(list.children[i].childNodes[1]);
             }
         }
     }
 }
 
-let f1000 = throttle(f, 1000);
+function childCounter(elem) {
+    totalChild += elem.childNodes[1].children.length;
 
-f1000(1);
-setTimeout( () => f1000(2), 1000);
-f1000(3);
-f1000(4);
-f1000(5);
-f1000(6);
+    for(let i = 0; i < elem.childNodes[1].children.length; i++) {
+        if(elem.childNodes[1].children[i].childNodes.length != 1) {
+            childCounter(elem.childNodes[1].children[i]);
+        }
+    }
+}
+
+scanner(list);
+
