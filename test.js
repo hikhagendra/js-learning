@@ -1,17 +1,25 @@
 let data = {
-    "Fish": {
-        "trout": {},
-        "salmon": {}
+    "Animals": {
+        "Mammals": {
+            "Cows": {},
+            "Donkeys": {},
+            "Dogs": {},
+            "Tigers": {}
+        },
+        "Other": {
+            "Snakes": {},
+            "Birds": {},
+            "Lizards": {}
+        }
     },
     
-    "Tree": {
-        "Huge": {
-            "sequoia": {},
-            "oak": {}
+    "Fishes": {
+        "Aquarium": {
+            "Guppy": {},
+            "Angelfish": {}
         },
-        "Flowering": {
-            "apple tree": {},
-            "magnolia": {}
+        "Sea": {
+            "Sea trout": {},
         }
     }
 };
@@ -27,7 +35,6 @@ function createTree(box, data) {
             let li = document.createElement('li');
             li.textContent = item;
             innerBox.append(li);
-            console.log(item);
     
             let noChild = true;
 
@@ -47,3 +54,15 @@ function createTree(box, data) {
 
     box.append(rootUl);
 }
+
+function childCounter(elem) {
+    let allChild = elem.getElementsByTagName('li');
+    
+    for(let element of allChild) {
+        if(element.getElementsByTagName('li').length !== 0) {
+            element.childNodes[0].data += ` [${element.getElementsByTagName('li').length}]`;
+        }
+    }
+}
+
+childCounter(container);
