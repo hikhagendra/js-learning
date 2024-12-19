@@ -1,40 +1,49 @@
-let list = document.getElementById('list');
-let totalChild = 0;
-let text = '';
+let data = {
+    "Fish": {
+        "trout": {},
+        "salmon": {}
+    },
+    
+    "Tree": {
+        "Huge": {
+            "sequoia": {},
+            "oak": {}
+        },
+        "Flowering": {
+            "apple tree": {},
+            "magnolia": {}
+        }
+    }
+};
 
-function scanner(list) {
-    for(let i = 0; i < list.children.length; i++) {
-        if(list.children[i].tagName == 'LI') {
-            // Fetch the value of LI and count its children
-            text = list.children[i].childNodes[0].data;
+let container = document.getElementById('container');
+createTree(container, data);
 
-            if(list.children[i].childNodes.length != 1) {
-                childCounter(list.children[i], 0)
-            } else {
-                totalChild = 0;
+function createTree(box, data) {
+    let rootUl = document.createElement('ul');
+
+    function innerCreator(innerBox, data) {
+        for(let item in data) {
+            let li = document.createElement('li');
+            li.textContent = item;
+            innerBox.append(li);
+            console.log(item);
+    
+            let noChild = true;
+
+            for(let child in data[item]) {
+                noChild = false;
             }
 
-            // Display the values in alert
-            alert(text.trim() + ': ' + totalChild);
-
-            // If the LI has child UL then re-run the loop
-            if(list.children[i].childNodes.length != 1) {
-                totalChild = 0;
-                scanner(list.children[i].childNodes[1]);
+            if(!noChild) {
+                let childUl = document.createElement('ul');
+                li.append(childUl);
+                innerCreator(childUl, data[item]);
             }
         }
     }
+
+    innerCreator(rootUl, data);
+
+    box.append(rootUl);
 }
-
-function childCounter(elem) {
-    totalChild += elem.childNodes[1].children.length;
-
-    for(let i = 0; i < elem.childNodes[1].children.length; i++) {
-        if(elem.childNodes[1].children[i].childNodes.length != 1) {
-            childCounter(elem.childNodes[1].children[i]);
-        }
-    }
-}
-
-scanner(list);
-
