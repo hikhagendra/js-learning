@@ -1,25 +1,32 @@
-document.body.insertAdjacentHTML('afterbegin', '<div class="timer"><span class="hr">hr</span>:<span class="min">mm</span>:<span class="sec">ss</span></div>');
+let tbody = document.getElementsByTagName('tbody');
+let rows = tbody[0].getElementsByTagName('tr');
 
-let timerId;
+function orderByName() {
+    let newOrder = [];
 
-function clockStart() {
-    if(!timerId) {
-        timerId = setInterval(update, 1000);
+    for(let i = 0; i < rows.length; i++) {
+        newOrder.push(rows[i]);
     }
 
-    update();
+    newOrder.sort(function(a, b) { 
+        if(a.children[0].firstChild.data > b.children[0].firstChild.data) {
+            return 1;
+        }
+
+        if(a.children[0].firstChild.data == b.children[0].firstChild.data) {
+            return 0;
+        }
+
+        if(a.children[0].firstChild.data < b.children[0].firstChild.data) {
+            return -1;
+        }
+    });
+
+    tbody[0].innerHTML = '';
+
+    for(let i = 0; i < newOrder.length; i++) {
+        tbody[0].append(newOrder[i]);
+    }
 }
 
-function clockStop() {
-    clearInterval(timerId);
-}
-
-function update() {
-    let d = new Date();
-
-    document.querySelector('.hr').textContent = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
-
-    document.querySelector('.min').textContent = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
-
-    document.querySelector('.sec').textContent = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds();
-}
+orderByName();
