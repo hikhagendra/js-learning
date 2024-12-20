@@ -1,68 +1,63 @@
-let data = {
-    "Animals": {
-        "Mammals": {
-            "Cows": {},
-            "Donkeys": {},
-            "Dogs": {},
-            "Tigers": {}
-        },
-        "Other": {
-            "Snakes": {},
-            "Birds": {},
-            "Lizards": {}
-        }
-    },
-    
-    "Fishes": {
-        "Aquarium": {
-            "Guppy": {},
-            "Angelfish": {}
-        },
-        "Sea": {
-            "Sea trout": {},
-        }
+function createCalendar(elem, year, month) {
+    // debugger;
+    let table = document.createElement('table');
+    let date = new Date(year, month - 1);
+    let days = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+
+    // Create heading
+    let headingRow = document.createElement('tr');
+    for(let i = 0; i < days.length; i++) {
+        let heading = document.createElement('th');
+        heading.textContent = days[i];
+        headingRow.append(heading);
     }
-};
+    table.append(headingRow);
 
-let container = document.getElementById('container');
-createTree(container, data);
+    // Create calendar days
+    let monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    let lastDay = monthEnd.getDate();
+    let createRow = true;
+    let dataRow;
+    let beforeGaps;
+    let afterGaps;
+    let totalCells;
+    let day = 1;
 
-function createTree(box, data) {
-    let rootUl = document.createElement('ul');
-
-    function innerCreator(innerBox, data) {
-        for(let item in data) {
-            let li = document.createElement('li');
-            li.textContent = item;
-            innerBox.append(li);
-    
-            let noChild = true;
-
-            for(let child in data[item]) {
-                noChild = false;
-            }
-
-            if(!noChild) {
-                let childUl = document.createElement('ul');
-                li.append(childUl);
-                innerCreator(childUl, data[item]);
-            }
-        }
+    if(date.getDay() == 0) {
+        beforeGaps = 6;
+    } else if(date.getDay() == 1) {
+        beforeGaps = 0;
+    } else {
+        beforeGaps = date.getDay() - 1;
     }
 
-    innerCreator(rootUl, data);
+    if(monthEnd.getDay() == 0) {
+        afterGaps = 0;
+    } else {
+        afterGaps = 7 - monthEnd.getDay();
+    }
 
-    box.append(rootUl);
+    totalCells = beforeGaps + lastDay + afterGaps;
+
+    for(let i = 1; i <= totalCells; i++) {
+        if(createRow) {
+            dataRow = document.createElement('tr');
+            createRow = false;
+        }
+
+        let data = document.createElement('td');
+        data.textContent = i <= beforeGaps || i > beforeGaps + lastDay ? '' : day++;
+        dataRow.append(data);
+
+        // Append the data row to the table
+        if(i%7 == 0) {
+            table.append(dataRow);
+            createRow = true;
+        }
+    }
+    
+    // Append table to the container
+    elem.append(table);
 }
 
-function childCounter(elem) {
-    let allChild = elem.getElementsByTagName('li');
-    
-    for(let element of allChild) {
-        if(element.getElementsByTagName('li').length !== 0) {
-            element.childNodes[0].data += ` [${element.getElementsByTagName('li').length}]`;
-        }
-    }
-}
-
-childCounter(container);
+createCalendar(calendar, 2001, 9);
