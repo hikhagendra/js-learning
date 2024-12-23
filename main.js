@@ -1,27 +1,4 @@
-function showNotification(options) {
-    let div = document.createElement('div');
+let ball = document.getElementById('ball');
 
-    // Add Classes
-    div.classList.add('notification');
-    div.classList.add(options.className);
-
-    // Apply CSS
-    div.style.top = options.top + 'px';
-    div.style.right = options.right + 'px';
-
-    // Add inner text
-    div.innerHTML = options.html;
-
-    // Push the notification to the page
-    document.body.prepend(div);
-
-    // Disappear after 1.5 seconds
-    setTimeout(() => div.remove(), 1500);
-}
-
-showNotification({
-    top: 10,
-    right: 10,
-    html: "Hello!",
-    className: "welcome"
-});
+ball.style.left = (ball.offsetParent.scrollWidth / 2) - (ball.clientWidth / 2) + 'px';
+ball.style.top = (ball.offsetParent.scrollHeight / 2) - (ball.clientHeight / 2) + 'px';
