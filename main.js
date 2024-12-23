@@ -1,32 +1,27 @@
-let tbody = document.getElementsByTagName('tbody');
-let rows = tbody[0].getElementsByTagName('tr');
+function showNotification(options) {
+    let div = document.createElement('div');
 
-function orderByName() {
-    let newOrder = [];
+    // Add Classes
+    div.classList.add('notification');
+    div.classList.add(options.className);
 
-    for(let i = 0; i < rows.length; i++) {
-        newOrder.push(rows[i]);
-    }
+    // Apply CSS
+    div.style.top = options.top + 'px';
+    div.style.right = options.right + 'px';
 
-    newOrder.sort(function(a, b) { 
-        if(a.children[0].firstChild.data > b.children[0].firstChild.data) {
-            return 1;
-        }
+    // Add inner text
+    div.innerHTML = options.html;
 
-        if(a.children[0].firstChild.data == b.children[0].firstChild.data) {
-            return 0;
-        }
+    // Push the notification to the page
+    document.body.prepend(div);
 
-        if(a.children[0].firstChild.data < b.children[0].firstChild.data) {
-            return -1;
-        }
-    });
-
-    tbody[0].innerHTML = '';
-
-    for(let i = 0; i < newOrder.length; i++) {
-        tbody[0].append(newOrder[i]);
-    }
+    // Disappear after 1.5 seconds
+    setTimeout(() => div.remove(), 1500);
 }
 
-orderByName();
+showNotification({
+    top: 10,
+    right: 10,
+    html: "Hello!",
+    className: "welcome"
+});
