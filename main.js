@@ -13,10 +13,14 @@ let rightArrCoords = rightArrow.getBoundingClientRect();
 let listContCoords = listContainer.getBoundingClientRect();
 
 
+// Controller
+let countPerSlide = 4;
+
+
 // Set Carousel container's full width
 let totalWidth = 0;
 for(let item of imgList) {
-    item.style.width = (caroCoords.width/3) - ((carousel.clientLeft * 2) / 3) + 'px';
+    item.style.width = (caroCoords.width/countPerSlide) - ((carousel.clientLeft * 2) / countPerSlide) + 'px';
     let itemCoords = item.getBoundingClientRect();
     totalWidth += itemCoords.width;
 }
