@@ -1,30 +1,54 @@
-let messages = document.getElementsByClassName('pane');
+// Get document elements
+let carousel = document.getElementById('carousel');
+let imgList = carousel.querySelectorAll('li');
+let listContainer = document.getElementById('list');
+let leftArrow = document.getElementById('left');
+let rightArrow = document.getElementById('right');
 
-// Add the close button to all messages
-for(let msg of messages) {
-    // Create a close button
-    let closeBtn = document.createElement('button');
 
-    // Add button class and content
-    closeBtn.classList.add('remove-button');
-    closeBtn.textContent = '[x]';
+// Extract coordinates
+let caroCoords = carousel.getBoundingClientRect();
+let leftArrCoords = leftArrow.getBoundingClientRect();
+let rightArrCoords = rightArrow.getBoundingClientRect();
+let listContCoords = listContainer.getBoundingClientRect();
 
-    // Append the button to message box
-    msg.append(closeBtn);
 
-    // Get the message and button's coordinates
-    let msgCoords = msg.getBoundingClientRect();
-    let btnCoords = closeBtn.getBoundingClientRect();
-    
-    // Position button to the top right of the message box
-    closeBtn.style.top = '0px';
-    closeBtn.style.left = msgCoords.width - btnCoords.width - 10 + 'px';
+// Set Carousel container's full width
+let totalWidth = 0;
+for(let item of imgList) {
+    item.style.width = (caroCoords.width/3) - ((carousel.clientLeft * 2) / 3) + 'px';
+    let itemCoords = item.getBoundingClientRect();
+    totalWidth += itemCoords.width;
 }
 
-let closeBtns = document.getElementsByClassName('remove-button');
+listContainer.style.width = totalWidth + 'px';
 
-for(let btn of closeBtns) {
-    btn.addEventListener('click', function(e) {
-        e.currentTarget.parentNode.remove();
-    });
-}
+
+// Place left and right arrow in carousel
+leftArrow.style.top = rightArrow.style.top = (carousel.clientHeight / 2) - (leftArrCoords.height / 2) + 'px';
+rightArrow.style.left = carousel.clientWidth - rightArrCoords.width + 'px';
+
+
+// Add life to the slider
+let totalScrollable = listContainer.clientWidth - listContCoords.width;
+let scrolledWidth = 0;
+
+rightArrow.addEventListener('click', function() {
+    if((totalScrollable + scrolledWidth) >= listContCoords.width) {
+        scrolledWidth = scrolledWidth - listContCoords.width;
+        listContainer.style.marginLeft = scrolledWidth + 'px';
+    } else {
+        scrolledWidth = scrolledWidth - (totalScrollable + scrolledWidth);
+        listContainer.style.marginLeft = scrolledWidth + 'px';
+    }
+});
+
+leftArrow.addEventListener('click', function() {
+    if(scrolledWidth <= -listContCoords.width) {
+        scrolledWidth = scrolledWidth + listContCoords.width;
+        listContainer.style.marginLeft = scrolledWidth + 'px';
+    } else {
+        scrolledWidth = scrolledWidth - scrolledWidth;
+        listContainer.style.marginLeft = scrolledWidth + 'px';
+    }
+});
