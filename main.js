@@ -1,69 +1,35 @@
-/**
- * Positions elem relative to anchor as said in position.
- *
- * @param {Node} anchor     Anchor element for positioning
- * @param {string} position One of: top/right/bottom
- * @param {Node} elem       Element to position
- *
- * Both elements: elem and anchor must be in the document
-*/
-function positionAt(anchor, position, elem) {
-    let ancCoords = anchor.getBoundingClientRect();
-    let elemCoords = elem.getBoundingClientRect();
+// Elements
+let field = document.getElementById('field');
+let ball = document.getElementById('ball');
 
-    switch (position) {
-        case 'top':
-            elem.style.top = ancCoords.top - elemCoords.height + 'px';
-            elem.style.left = ancCoords.left + 'px';
-            break;
-    
-        case 'right':
-            elem.style.top = ancCoords.top + 'px';
-            elem.style.left = ancCoords.left + ancCoords.width + 'px';
-            break;
+// Additional data extracted
+let ballCoords = ball.getBoundingClientRect();
+let edgeLimit = {
+    top: field.offsetTop + field.clientTop + (ballCoords.height/2),
+    bottom: field.offsetTop + field.clientTop + field.clientHeight - (ballCoords.height/2),
+    left: field.offsetLeft + field.clientLeft + (ballCoords.width/2),
+    right: field.offsetLeft + field.clientLeft + field.clientWidth - (ballCoords.width/2)
+}
 
-        case 'bottom':
-            elem.style.top = ancCoords.top + ancCoords.height + 'px';
-            elem.style.left = ancCoords.left + 'px';
-            break;
-        
-        case 'top-in':
-            elem.style.top = ancCoords.top + 'px';
-            elem.style.left = ancCoords.left + 'px';
-            break;
+// Initial position
+ball.style.top = ballCoords.top + 'px';
+ball.style.left = ballCoords.left + 'px';
 
-        case 'bottom-in':
-            elem.style.top = ancCoords.top + ancCoords.height - elemCoords.height + 'px';
-            elem.style.left = ancCoords.left + 'px';
-            break;
-
-        case 'right-in':
-            elem.style.top = ancCoords.top + 'px';
-            elem.style.left = ancCoords.left + ancCoords.width - elemCoords.width + 'px';
-
+// Event trigger
+field.addEventListener('click', function(e) {
+    if(e.clientY <= edgeLimit.top) {
+        ball.style.top = edgeLimit.top - (ballCoords.height/2) + 'px';
+    } else if(e.clientY >= edgeLimit.bottom) {
+        ball.style.top = edgeLimit.bottom - (ballCoords.height/2) + 'px';
+    } else {
+        ball.style.top = e.clientY - (ballCoords.height/2) + 'px';
     }
-}
 
-/**
- * Shows a note with the given html at the given position
- * relative to the anchor element.
- */
-function showNote(anchor, position, html) {
-
-    let note = document.createElement('div');
-    note.className = "note";
-    note.innerHTML = html;
-    document.body.append(note);
-
-    positionAt(anchor, position, note);
-}
-
-// test it
-let blockquote = document.querySelector('blockquote');
-
-showNote(blockquote, "top", "note above");
-showNote(blockquote, "right", "note at the right");
-showNote(blockquote, "bottom", "note below");
-showNote(blockquote, "bottom-in", "note bottom-in");
-showNote(blockquote, "top-in", "note top-in");
-showNote(blockquote, "right-in", "note right-in");
+    if(e.clientX <= edgeLimit.left) {
+        ball.style.left = edgeLimit.left - (ballCoords.width/2) + 'px';
+    } else if(e.clientX >= edgeLimit.right) {
+        ball.style.left = edgeLimit.right - (ballCoords.width/2) + 'px';
+    } else {
+        ball.style.left = e.clientX - (ballCoords.width/2) + 'px';
+    }
+});
