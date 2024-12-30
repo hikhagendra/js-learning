@@ -1,72 +1,54 @@
-let grid = document.getElementById('grid');
-let tHead = grid.querySelector('thead');
-let tBody = grid.querySelector('tbody');
+document.addEventListener('mouseover', function(event) {
+    let hasToolTip = event.target.hasAttribute('data-tooltip');
 
-tHead.addEventListener('click', function(event) {
-    let sortType = event.target.dataset.type;
-    let headings = event.target.closest('tr').getElementsByTagName('th');
-    let colNumber = 0;
-
-    for(let i = 0; i < headings.length; i++) {
-        if(headings[i] == event.target) {
-            colNumber = i;
-            break;
-        }
+    if(hasToolTip) {
+        showToolTip(event.target);
     }
-    
-    new GridShort(tBody, sortType, colNumber);
 });
 
-class GridShort {
-    constructor(grid, type, colNum) {
-        this.rows = this.toArray(grid);
-        this[type + 'Sort'](colNum);
+document.addEventListener('mouseout', function(event) {
+    let hasToolTip = event.target.hasAttribute('data-tooltip');
+
+    if(hasToolTip) {
+        hideToolTip(event.target);
+    }
+});
+
+function showToolTip(elem) {
+    let content = elem.dataset.tooltip;
+
+    // Create tooltip element
+    let tooltip = document.createElement('span');
+    tooltip.innerHTML = content;
+    tooltip.classList.add('tooltip');
+    elem.append(tooltip);
+
+    // Get Element and Tooltip coordinates
+    let toolTipCoords = tooltip.getBoundingClientRect();
+    let elemCoords = elem.getBoundingClientRect();
+
+    // Tooltip Positioning
+    let leftPos = 0;
+    let topPos = 0;
+
+    if((elemCoords.left + (elemCoords.width / 2)) < (toolTipCoords.width / 2)) {
+        leftPos = elemCoords.left;
+    } else {
+        leftPos = elemCoords.left + ((elemCoords.width - toolTipCoords.width)/2);
     }
 
-    numberSort(colNum) {
-        // Sort the number column data
-        this.rows.sort(function(a, b) {
-            return a.children[colNum].firstChild.data - b.children[colNum].firstChild.data;
-        });
-        
-        // Clean the table
-        tBody.innerHTML = '';
-
-        // Append the sorted rows
-        this.rows.forEach(row => tBody.append(row));
+    if((elemCoords.top - 5) < toolTipCoords.height) {
+        topPos = elemCoords.top + elemCoords.height + 5;
+    } else {
+        topPos = elemCoords.top - toolTipCoords.height - 5;
     }
 
-    stringSort(colNum) {
-        // Sort the string column data
-        this.rows.sort(function(a, b) {
-            if(a.children[colNum].firstChild.data > b.children[colNum].firstChild.data) {
-                return 1;
-            }
-            
-            if(a.children[colNum].firstChild.data == b.children[colNum].firstChild.data) {
-                return 0;
-            }
-            
-            if(a.children[colNum].firstChild.data < b.children[colNum].firstChild.data) {
-                return -1;
-            }
-        });
-        
-        // Clean the table
-        tBody.innerHTML = '';
+    tooltip.style.left = leftPos + 'px';
+    tooltip.style.top = topPos + 'px';
+}
 
-        // Append the sorted rows
-        this.rows.forEach(row => tBody.append(row));
-    }
-
-    toArray(data) {
-        let nodeCollection = data.getElementsByTagName('tr');
-        let arrData = [];
-
-        for(let node of nodeCollection) {
-            arrData.push(node);
-        }
-
-        return arrData;
+function hideToolTip(elem) {
+    if(elem.lastChild.classList.contains('tooltip')) {
+        elem.lastChild.remove();
     }
 }

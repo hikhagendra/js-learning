@@ -5,58 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    table {
-      border-collapse: collapse;
+    body {
+      height: 2000px;
+      /* make body scrollable, the tooltip should work after the scroll */
     }
-    th, td {
-      border: 1px solid black;
-      padding: 4px;
-    }
-    th {
-      cursor: pointer;
-    }
-    th:hover {
-      background: yellow;
+
+    .tooltip {
+      /* some styles for the tooltip, you can use your own instead */
+      position: fixed;
+      padding: 10px 20px;
+      border: 1px solid #b3c9ce;
+      border-radius: 4px;
+      text-align: center;
+      font: italic 14px/1.3 sans-serif;
+      color: #333;
+      background: #fff;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
     }
   </style>
 </head>
 <body>
-  <table id="grid">
-    <thead>
-      <tr>
-        <th data-type="number">Age</th>
-        <th data-type="string">Name</th>
-        <th data-type="string">Address</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>5</td>
-        <td>John</td>
-        <td>Lazimpat</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Pete</td>
-        <td>Thanmel</td>
-      </tr>
-      <tr>
-        <td>12</td>
-        <td>Ann</td>
-        <td>Chabahil</td>
-      </tr>
-      <tr>
-        <td>9</td>
-        <td>Eugene</td>
-        <td>Faika</td>
-      </tr>
-      <tr>
-        <td>1</td>
-        <td>Ilya</td>
-        <td>Baneshwor</td>
-      </tr>
-    </tbody>
-  </table>
+  <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
+  <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
+
+  <button data-tooltip="the tooltip is longer than the element">Short button</button>
+  <button data-tooltip="HTML<br>tooltip">One more button</button>
+
+  <p>Scroll the page to make buttons appear on the top, check if the <span data-tooltip="Test">tooltips</span> show up correctly.</p>
 
   <script src="main.js"></script>
 </body>
