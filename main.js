@@ -1,11 +1,13 @@
-let content = document.getElementById('contents');
+let screen = document.getElementById('largeImg');
+let thumbs = document.getElementById('thumbs');
 
-content.addEventListener('click', function(event) {
-    let target = event.target.closest('a');
+thumbs.addEventListener('click', function(event) {
+    if(event.target.tagName != 'IMG') return;
 
-    if(!target) return;
+    let lgImg = event.target.closest('a');
 
-    let ask = confirm(`Leave for ${target.href}`);
+    screen.setAttribute('src', lgImg.getAttribute('href'));
+    screen.setAttribute('alt', lgImg.getAttribute('title'));
 
-    if(!ask) event.preventDefault();
+    event.preventDefault();
 });
