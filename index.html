@@ -5,33 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    body {
-      height: 2000px;
-      /* make body scrollable, the tooltip should work after the scroll */
-    }
-
-    .tooltip {
-      /* some styles for the tooltip, you can use your own instead */
-      position: fixed;
-      padding: 10px 20px;
-      border: 1px solid #b3c9ce;
-      border-radius: 4px;
-      text-align: center;
-      font: italic 14px/1.3 sans-serif;
-      color: #333;
-      background: #fff;
-      box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+    #contents {
+      padding: 5px;
+      border: 1px green solid;
     }
   </style>
 </head>
 <body>
-  <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
-  <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
-
-  <button data-tooltip="the tooltip is longer than the element">Short button</button>
-  <button data-tooltip="HTML<br>tooltip">One more button</button>
-
-  <p>Scroll the page to make buttons appear on the top, check if the <span data-tooltip="Test">tooltips</span> show up correctly.</p>
+  <fieldset id="contents">
+    <legend>#contents</legend>
+    <p>
+      How about to read <a href="https://wikipedia.org">Wikipedia</a> or visit <a href="https://w3.org"><i>W3.org</i></a> and learn about modern standards?
+    </p>
+  </fieldset>
 
   <script src="main.js"></script>
 </body>
