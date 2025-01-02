@@ -1,21 +1,49 @@
-let list = document.getElementById('ul');
+let house = document.getElementById('house');
+let tooltipElem;
 
-// Disable text selection
-list.onmousedown = function() { return false; }
+house.addEventListener('mouseover', function(event) {
+    let toolElem = event.target.closest('[data-tooltip]');
+    
+    if(!toolElem) return;
 
-list.addEventListener('click', function(event) {
-    if(event.target.tagName != 'LI') return;
-
-    if(event.ctrlKey || event.metaKey) {
-        event.target.classList.toggle('selected');
-    } else {
-        disSelectOld();
-        event.target.classList.add('selected');
-    }
+    tooltipElem = showToolTip(toolElem);
 });
 
-function disSelectOld() {
-    for(let item of list.querySelectorAll('li')) {
-        item.classList.remove('selected');
+house.addEventListener('mouseout', function(event) {
+    tooltipElem.remove();
+});
+
+function showToolTip(elem) {
+    let content = elem.dataset.tooltip;
+
+    // Create tooltip element
+    let tooltip = document.createElement('span');
+    tooltip.innerHTML = content;
+    tooltip.classList.add('tooltip');
+    elem.append(tooltip);
+
+    // Get Element and Tooltip coordinates
+    let toolTipCoords = tooltip.getBoundingClientRect();
+    let elemCoords = elem.getBoundingClientRect();
+
+    // Tooltip Positioning
+    let leftPos = 0;
+    let topPos = 0;
+
+    if((elemCoords.left + (elemCoords.width / 2)) < (toolTipCoords.width / 2)) {
+        leftPos = elemCoords.left;
+    } else {
+        leftPos = elemCoords.left + ((elemCoords.width - toolTipCoords.width)/2);
     }
+
+    if((elemCoords.top - 5) < toolTipCoords.height) {
+        topPos = elemCoords.top + elemCoords.height + 5;
+    } else {
+        topPos = elemCoords.top - toolTipCoords.height - 5;
+    }
+
+    tooltip.style.left = leftPos + 'px';
+    tooltip.style.top = topPos + 'px';
+
+    return tooltip;
 }
