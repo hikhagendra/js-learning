@@ -4,62 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="https://en.js.cx/test/libs.js"></script>
   <style>
-    body {
-      height: 2000px;
-      /* the tooltip should work after page scroll too */
+    .hours {
+      color: red;
     }
 
-    .tooltip {
-      position: fixed;
-      z-index: 100;
+    body {
+      margin: 0;
+    }
 
+    .minutes {
+      color: green;
+    }
+
+    .seconds {
+      color: blue;
+    }
+
+    .clock {
+      border: 1px dashed black;
+      padding: 5px;
+      display: inline-block;
+      background: yellow;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    #tooltip {
+      position: absolute;
       padding: 10px 20px;
-
       border: 1px solid #b3c9ce;
       border-radius: 4px;
       text-align: center;
       font: italic 14px/1.3 sans-serif;
       color: #333;
       background: #fff;
+      z-index: 100000;
       box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
-    }
-
-    #house {
-      margin-top: 50px;
-      width: 400px;
-      border: 1px solid brown;
-    }
-
-    #roof {
-      width: 0;
-      height: 0;
-      border-left: 200px solid transparent;
-      border-right: 200px solid transparent;
-      border-bottom: 20px solid brown;
-      margin-top: -20px;
-    }
-
-    p {
-      text-align: justify;
-      margin: 10px 3px;
     }
   </style>
 </head>
 <body>
-  <div data-tooltip="Here is the house interior" id="house">
-    <div data-tooltip="Here is the roof" id="roof"></div>
-
-    <p>Once upon a time there was a mother pig who had three little pigs.</p>
-
-    <p>The three little pigs grew so big that their <span data-tooltip="First love">mother</span> said to them, "You are too big to live here any longer. You must go and build houses for yourselves. But take care that the wolf does not catch you."</p>
-
-    <p>The three little pigs set off. "We will take care that the wolf does not catch us," they said.</p>
-
-    <p>Soon they met a man. <a href="https://en.wikipedia.org/wiki/The_Three_Little_Pigs" data-tooltip="Read on…">Hover over me</a></p>
-
+  <div id="elem" class="clock">
+    <span class="hours">12</span> :
+    <span class="minutes">30</span> :
+    <span class="seconds">00</span>
   </div>
 
+  <div id="tooltip" hidden>Tooltip</div>
+
+  <script src="hoverIntent.js"></script>
   <script src="main.js"></script>
+  <script src="test.js"></script>
 </body>
 </html>
