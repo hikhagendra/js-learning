@@ -1,51 +1,38 @@
-document.onmousedown = function(event) {
+let slider = document.getElementById('slider');
+let thumb = document.getElementById('thumb');
+
+thumb.addEventListener('pointerdown', function(event) {
   event.preventDefault();
+  thumb.setPointerCapture(event.pointerId);
 
-  let dragElem = document.elementFromPoint(event.clientX, event.clientY).closest('.draggable');
+  let sliderCoords = slider.getBoundingClientRect();
+  let thumbCoords = thumb.getBoundingClientRect();
+  let shiftX = event.clientX - thumbCoords.left;
 
-  if(dragElem) {
-    dragElem.style.position = 'absolute';
-    moveAt(event.pageX, event.pageY, dragElem);
+  moveAt(event.clientX, event);
 
-    document.addEventListener('mousemove', onMouseMove);
-
-    function onMouseMove(event) {
-      let dragElemCoords = dragElem.getBoundingClientRect();
-      let xEdge = event.pageX < (dragElemCoords.width / 2) ? (dragElemCoords.width / 2) : event.pageX > document.documentElement.clientWidth - (dragElemCoords.width / 2) ? document.documentElement.clientWidth - (dragElemCoords.width / 2) : event.pageX;
-      let yEdge = event.pageY < (dragElemCoords.height / 2) ? (dragElemCoords.height / 2) : event.pageY;
-      let scrollDown = event.y + dragElemCoords.height / 2 >= document.documentElement.clientHeight && event.pageY < document.documentElement.offsetHeight - (dragElemCoords.height / 2);
-      let scrollUp = event.y <= dragElemCoords.height / 2 && document.documentElement.scrollTop > 0
-
-      // Scroll up and down
-      if(scrollDown) {
-        moveAt(xEdge, yEdge, dragElem);
-        window.scrollBy(0, 15);
-      } else if(scrollUp) {
-        moveAt(xEdge, yEdge, dragElem);
-        window.scrollBy(0, -15);
-      } else if(event.pageY > document.documentElement.offsetHeight - (dragElemCoords.height / 2)) {
-        dragElem.scrollIntoView(false);
-        moveAt(xEdge, document.documentElement.offsetHeight - (dragElemCoords.height / 2), dragElem);
-      } else if(event.pageY <= dragElemCoords.height / 2) {
-        dragElem.scrollIntoView(top);
-        moveAt(xEdge, dragElemCoords.y < 0 ? yEdge - Math.abs(dragElemCoords.y) : yEdge, dragElem);
-      } else {
-        moveAt(xEdge, yEdge, dragElem);
-      }
-
-      document.onmouseup = function(event) {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.onmouseup = null;
-      }
+  function moveAt(pageX, event) {
+    if(event.clientX < sliderCoords.left) {
+      pageX = sliderCoords.left + shiftX;
+    } else if(event.clientX > sliderCoords.left + sliderCoords.width - thumbCoords.width) {
+      pageX = sliderCoords.left + sliderCoords.width - thumbCoords.width + shiftX;
+    } else {
+      pageX = event.clientX;
     }
+
+    console.log(pageX);
+
+    thumb.style.left = pageX - sliderCoords.left - shiftX + 'px';
   }
 
-  function moveAt(pageX, pageY, elem) {
-    elem.style.left = pageX - (elem.getBoundingClientRect().width / 2) + 'px';
-    elem.style.top = pageY - (elem.getBoundingClientRect().height / 2) + 'px';
-  }
-};
+  thumb.addEventListener('pointermove', onMouseMove);
 
-document.ondragstart = function() {
-  return false;
-}
+  function onMouseMove(event) {
+    moveAt(event.clientX, event);
+
+    thumb.onmouseup = thumb.onmouseup = function() {
+      thumb.removeEventListener('pointermove', onMouseMove);
+      thumb.onmouseup = thumb.onmouseup = null;
+    };
+  }
+});
