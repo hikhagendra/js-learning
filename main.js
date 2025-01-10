@@ -1,31 +1,17 @@
-function runOnKeys(func, ...rest) {
-  let args = rest;
-  let trackedKeys = [];
-  
-  document.addEventListener('keydown', function(event) {
-    if(!args.includes(event.code)) return;
+window.addEventListener('scroll', function() {
+  if((document.documentElement.scrollHeight - (window.pageYOffset + document.documentElement.clientHeight)) <= 100) {
+    insertDate(1);
+  }
+});
 
-    if(args.includes(event.code) && !trackedKeys.includes(event.code)) {
-      trackedKeys.push(event.code);
-    }
+function insertDate(counter) {
+  for(let i = 0; i < counter; i++) {
+    let date = new Date();
+    let p = document.createElement('p');
+    p.textContent = `Date: ${date}`;
 
-    if(trackedKeys.length == args.length) {
-      func();
-      trackedKeys = [];
-    }
-
-    document.onkeyup = function(event) {
-      if(trackedKeys.includes(event.code)) {
-        let pos = trackedKeys.findIndex(item => item == event.code);
-
-        trackedKeys.splice(pos, 1);
-      }
-    }
-  });
+    document.body.append(p);
+  }
 }
 
-runOnKeys(
-  () => alert('Hello!'),
-  'KeyQ',
-  'KeyW',
-);
+insertDate(20);
