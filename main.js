@@ -1,35 +1,32 @@
-/**
- * Tests if the element is visible (within the visible part of the page)
- * It's enough that the top or bottom edge of the element are visible
- */
-function isVisible(elem) {
-  let elemCoords = elem.getBoundingClientRect();
-  let from = window.pageYOffset;
-  let to = window.pageYOffset + (document.documentElement.clientHeight * 2);
-  let offsetBottom = elem.offsetTop + elem.offsetHeight;
-  let onScreen = (elem.offsetTop > from && elem.offsetTop < to) || (offsetBottom > from && offsetBottom < to);
-  
-  if(onScreen) {
-    return true;
-  } else {
-    return false;
+let view = document.getElementById('view');
+let editor;
+
+view.addEventListener('click', function(event) {
+  editorSwitch('edit', event.target);
+
+  editor.addEventListener('focusout', function(event) {
+    editorSwitch('view', null)
+  });
+});
+
+window.addEventListener('keydown', function(event) {
+  if(event.key == 'Enter') editorSwitch('view', null);
+});
+
+function editorSwitch(mode, elem) {
+  switch(mode) {
+    case 'edit':
+      editor = document.createElement('textarea');
+      editor.classList.add('edit');
+      editor.value = elem.innerHTML;
+      view.replaceWith(editor);
+      editor.focus();
+      break;
+    
+    case 'view':
+      editor.blur();
+      view.innerHTML = editor.value;
+      editor.replaceWith(view);
+      break;
   }
 }
-
-function showVisible() {
-  for (let img of document.querySelectorAll('img')) {
-    let realSrc = img.dataset.src;
-    if (!realSrc) continue;
-
-    if (isVisible(img)) {
-      realSrc += '?nocache=' + Math.random();
-
-      img.src = realSrc;
-
-      img.dataset.src = '';
-    }
-  }
-}
-
-window.addEventListener('scroll', showVisible);
-showVisible();
