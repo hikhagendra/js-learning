@@ -1,36 +1,28 @@
-let mouse = document.getElementById('mouse');
-let mouseCoords = null;
+// initial: the initial money sum
+// interest: e.g. 0.05 means 5% per year
+// years: how many years to wait
 
-mouse.addEventListener('click', function(event) {
-  this.tabIndex = 0;
+let form = document.forms.calculator;
+let moneyBefore = document.getElementById('money-before');
+let moneyAfter = document.getElementById('money-after');
+let diagramAfter = document.getElementById('height-after');
 
-  // Change position
-  this.style.position = 'fixed';
-  this.style.left = this.getBoundingClientRect().left + 'px';
-  this.style.top = this.getBoundingClientRect().top + 'px';
-
-  // Add move event
-  this.addEventListener('keydown', moveMouse);
+form.addEventListener('input', function(event) {
+  updateResult();
 });
 
-function moveMouse(event) {
-  mouseCoords = this.getBoundingClientRect();
+function updateResult() {
+  let initial = form.elements.money.value < 0 ? 0 : form.elements.money.value;
+  let interest = (form.elements.interest.value < 0) ? 0 : form.elements.interest.value / 100;
+  let years = form.elements.months.value / 12;
+  let result = Math.round(initial * (1 + interest) ** years);
 
-  switch(event.key) {
-    case 'ArrowRight':
-      this.style.left = mouseCoords.left + mouseCoords.width + 'px';
-      break;
+  // Update data
+  moneyBefore.textContent = initial;
+  moneyAfter.textContent = result;
 
-    case 'ArrowLeft':
-      this.style.left = mouseCoords.left - mouseCoords.width + 'px';
-      break;
-
-    case 'ArrowUp':
-      this.style.top = mouseCoords.top - mouseCoords.height + 'px';
-      break;
-
-    case 'ArrowDown':
-      this.style.top = mouseCoords.top + mouseCoords.height + 'px';
-      break;
-  }
+  // Update diagram
+  diagramAfter.style.height = (result / initial) * 100 + 'px';
 }
+
+updateResult();
