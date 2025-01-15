@@ -1,76 +1,49 @@
-let triggerPrompt = document.getElementById('show-prompt');
-let modal = document.getElementById('prompt-form-container');
+function preloadImages(sources, callback) {
+    let loadedCount = 0;
 
-function showPrompt(html, callback) {
-  function closePrompt(value) {
-    modal.hidden = true;
-    field.value = '';
-    field.blur();
-    firstElem.blur();
-    lastElem.blur();
-    callback(value);
-    document.body.style.overflow = '';
-    document.onkeydown = null;
-  }
+    sources.forEach(img => {
+        let imgElem = document.createElement('img');
+        imgElem.src = img;
+        document.body.append(imgElem);
 
-  // Show the modal
-  document.body.style.overflow = 'hidden';
-  modal.hidden = false;
+        imgElem.onload = function() {
+            loadedCount++;
 
-  // Variables initialization
-  let form = document.getElementById('prompt-form');
-  let msgBar = document.getElementById('prompt-message');
-  let field = form.elements.text;
-  let cancel = form.elements.cancel;
+            if(loadedCount == sources.length) callback();
+        };
 
-  // Update content
-  msgBar.innerHTML = html;
+        imgElem.onerror = function() {
+            loadedCount++;
 
-  // On submit
-  form.onsubmit = function(event) {
-    event.preventDefault();
-
-    if(field.value == '') return false;
-
-    closePrompt(field.value);
-  };
-
-  // On cancel
-  cancel.onclick = function() {
-    closePrompt(null);
-  };
-
-  // On key presses
-  document.onkeydown = function(event) {
-    if(event.key == 'Escape') {
-      closePrompt(null);
-    }
-  };
-
-  let lastElem = form.elements[form.elements.length - 1];
-  let firstElem = form.elements[0];
-
-  lastElem.onkeydown = function(e) {
-    if(e.key == 'Tab' && !e.shiftKey) {
-      firstElem.focus();
-      return false;
-    }
-  };
-
-  firstElem.onkeydown = function(e) {
-    if(e.key == 'Tab' && e.shiftKey) {
-      console.log('Now');
-      lastElem.focus();
-      return false;
-    }
-  };
-
-  // Set focus
-  field.focus();
+            if(loadedCount == sources.length) callback();
+        };
+    });
 }
 
-triggerPrompt.onclick = function() {
-  showPrompt("Welcome to <br>modal world :)", function(value) {
-    alert('You entered: ' + value);
-  });
-};
+// ---------- The test ----------
+
+let sources = [
+"https://en.js.cx/images-load/1.jpg",
+"https://en.js.cx/images-load/2.jpg",
+"https://en.js.cx/images-load/3.jpg"
+];
+
+// add random characters to prevent browser caching
+for (let i = 0; i < sources.length; i++) {
+    sources[i] += '?' + Math.random();
+}
+
+// for each image,
+// let's create another img with the same src and check that we have its width immediately
+function testLoaded() {
+    let widthSum = 0;
+    for (let i = 0; i < sources.length; i++) {
+        let img = document.createElement('img');
+        img.src = sources[i];
+        widthSum += img.width;
+    }
+    alert(widthSum);
+}
+
+// every image is 100x100, the total width should be 300
+preloadImages(sources, testLoaded);
