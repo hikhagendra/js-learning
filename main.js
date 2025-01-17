@@ -1,24 +1,15 @@
-function concat(arrays) {
-    let totalLen = arrays.reduce((acc, value) => acc + value.length, 0);
-    let merged = new Uint8Array(totalLen);
-    let pos = 0;
+async function getUsers(names) {
+    let users = [];
 
-    for(let arr of arrays) {
-        for(let i = 0; i < arr.length; i++) {
-            merged[pos] = arr[i];
-            pos++;
+    for(let name of names) {
+        let user = await fetch('https://api.github.com/users/' + name);
+        
+        if(user.status == 200) {
+            users.push(await user.json());
+        } else {
+            users.push(null);
         }
     }
 
-    return merged;
+    return users;
 }
-  
-let chunks = [
-    new Uint8Array([0, 1, 2]),
-    new Uint8Array([3, 4, 5]),
-    new Uint8Array([6, 7, 8])
-];
-  
-console.log(Array.from(concat(chunks))); // 0, 1, 2, 3, 4, 5, 6, 7, 8
-  
-console.log(concat(chunks).constructor.name); // Uint8Array
