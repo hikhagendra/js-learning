@@ -1,15 +1,13 @@
-async function getUsers(names) {
-    let users = [];
+let area = document.getElementById('area');
+let clear = document.getElementById('clear');
 
-    for(let name of names) {
-        let user = await fetch('https://api.github.com/users/' + name);
-        
-        if(user.status == 200) {
-            users.push(await user.json());
-        } else {
-            users.push(null);
-        }
-    }
+area.value = localStorage.getItem('areaValue');
 
-    return users;
-}
+area.addEventListener('input', function() {
+    localStorage.setItem('areaValue', area.value);
+});
+
+clear.addEventListener('click', function() {
+    area.value = '';
+    localStorage.removeItem('areaValue');
+});
